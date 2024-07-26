@@ -3,7 +3,7 @@ import './globals.css';
 import { Inter as FontSans } from 'next/font/google';
 
 import { cn } from '@/lib/utils';
-import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
 
 const fontSans = FontSans({
@@ -26,15 +26,16 @@ export default function RootLayout({
       <html lang="en">
         <body
           className={cn(
-            'min-h-screen bg-background font-sans antialiased',
+            'bg-background font-sans antialiased',
             fontSans.variable
           )}
         >
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
+            storageKey="connectup-theme"
           >
             {children}
           </ThemeProvider>
