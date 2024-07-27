@@ -1,8 +1,7 @@
 import { ModeToggle } from '@/components/mode-toggle';
-import { Button } from '@/components/ui/button';
 import { UserButton } from '@clerk/nextjs';
 
-export default function Home() {
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex  flex-col justify-center items-center">
       <nav className="flex justify-between items-center w-[400px] p-4">
@@ -12,8 +11,9 @@ export default function Home() {
           <UserButton />
         </div>
       </nav>
-      <p>Main page</p>
-      <Button size="sm"> click</Button>
+      {children}
     </main>
   );
-}
+};
+
+export default MainLayout;
