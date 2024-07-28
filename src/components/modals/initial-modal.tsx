@@ -23,6 +23,7 @@ import {
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { ModeToggle } from '../mode-toggle';
+import FileUpload from '@/components/file-upload';
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Server name is required.' }),
   imageUrl: z.string().min(1, { message: 'Server image is required.' }),
@@ -42,7 +43,7 @@ export const InitialModal = () => {
   });
   return (
     <Dialog open>
-      <DialogContent className=" overflow-hidden">
+      <DialogContent className="overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle>
             <ModeToggle />
@@ -56,7 +57,27 @@ export const InitialModal = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-8 px-6">
-              <div className="text-center"> TODO: image upload</div>
+              <div className="text-center flex items-center justify-center ">
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col items-center justify-center">
+                      <FormControl>
+                        <FileUpload
+                          endpoint="serverImage"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormDescription className="text-xs">
+                        This will be your server icon
+                      </FormDescription>
+                      <FormMessage className="text-red-500" />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="name"
