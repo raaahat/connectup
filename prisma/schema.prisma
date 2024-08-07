@@ -19,15 +19,15 @@ model Profile {
   imageUrl String @db.Text
   email    String @db.Text
 
-  servers  Server[]
-  members  Member[]
-  channels Channel[]
+  groupspaces GroupSpace[]
+  members     Member[]
+  channels    Channel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Server {
+model GroupSpace {
   id         String @id @default(uuid())
   name       String
   imageUrl   String @db.Text
@@ -58,14 +58,14 @@ model Member {
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  serverId String
-  server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  groupSpaceId String
+  groupspace   GroupSpace @relation(fields: [groupSpaceId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([profileId])
-  @@index([serverId])
+  @@index([groupSpaceId])
 }
 
 enum ChannelType {
@@ -82,12 +82,12 @@ model Channel {
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  serverId String
-  server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  groupspaceId String
+  groupspace   GroupSpace @relation(fields: [groupspaceId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([profileId])
-  @@index([serverId])
+  @@index([groupspaceId])
 }

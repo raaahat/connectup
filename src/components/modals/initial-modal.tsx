@@ -24,18 +24,16 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { ModeToggle } from '../mode-toggle';
 import FileUpload from '@/components/file-upload';
-const formSchema = z.object({
-  name: z.string().min(1, { message: 'Server name is required.' }),
-  imageUrl: z.string().min(1, { message: 'Server image is required.' }),
-});
+import { ProfileSchema } from '@/schemas';
+
 export const InitialModal = () => {
   const [isPending, startTransition] = useTransition();
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof ProfileSchema>) {
     console.log(values);
     startTransition(() => {});
   }
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(ProfileSchema),
     defaultValues: {
       name: '',
       imageUrl: '',

@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 export default async function SetupPage() {
   const profile = await initialProfile();
 
-  const server = await db.server.findFirst({
+  const groupSpace = await db.groupSpace.findFirst({
     where: {
       members: {
         some: {
@@ -15,8 +15,8 @@ export default async function SetupPage() {
       },
     },
   });
-  if (server) {
-    return redirect(`/servers/${server.id}`);
+  if (groupSpace) {
+    return redirect(`/groupSpaces/${groupSpace.id}`);
   }
   return <InitialModal />;
 }
