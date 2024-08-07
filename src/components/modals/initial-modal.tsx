@@ -25,12 +25,19 @@ import { Button } from '../ui/button';
 import { ModeToggle } from '../mode-toggle';
 import FileUpload from '@/components/file-upload';
 import { ProfileSchema } from '@/schemas';
+import { createGroupSpace } from '@/actions/group-space';
+import { useRouter } from 'next/navigation';
 
 export const InitialModal = () => {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   function onSubmit(values: z.infer<typeof ProfileSchema>) {
-    console.log(values);
-    startTransition(() => {});
+    startTransition(() => {
+      createGroupSpace(values).then((data) => {});
+    });
+    form.reset();
+    router.refresh;
+    window.location.reload();
   }
   const form = useForm({
     resolver: zodResolver(ProfileSchema),

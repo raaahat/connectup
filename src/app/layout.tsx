@@ -5,7 +5,6 @@ import { Inter as FontSans } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
-import { ModeToggle } from '@/components/mode-toggle';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -23,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider afterSignOutUrl="/">
       <html lang="en">
         <body
           className={cn(
@@ -38,7 +37,6 @@ export default function RootLayout({
             disableTransitionOnChange
             storageKey="connectup-theme"
           >
-            <ModeToggle />
             {children}
           </ThemeProvider>
         </body>

@@ -16,7 +16,7 @@ export default async function SetupPage() {
     },
   });
   if (groupSpace) {
-    return redirect(`/groupSpaces/${groupSpace.id}`);
+    return redirect(`/groupspaces/${groupSpace.id}`);
   }
   return <InitialModal />;
 }
