@@ -21,7 +21,7 @@ model Profile {
 
   groupspaces GroupSpace[]
   members     Member[]
-  channels    Channel[]
+  zones       Zone[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,16 +33,16 @@ model GroupSpace {
   imageUrl   String @db.Text
   inviteCode String @unique
 
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  ownerId String
+  profile Profile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  members  Member[]
-  channels Channel[]
+  members Member[]
+  zones   Zone[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([profileId])
+  @@index([ownerId])
 }
 
 enum MemberRole {
@@ -68,19 +68,19 @@ model Member {
   @@index([groupSpaceId])
 }
 
-enum ChannelType {
+enum ZoneType {
   TEXT
   AUDIO
   VIDEO
 }
 
-model Channel {
-  id   String      @id @default(uuid())
+model Zone {
+  id   String   @id @default(uuid())
   name String
-  type ChannelType @default(TEXT)
+  type ZoneType @default(TEXT)
 
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  creatorId String
+  profile   Profile @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   groupspaceId String
   groupspace   GroupSpace @relation(fields: [groupspaceId], references: [id], onDelete: Cascade)
@@ -88,6 +88,6 @@ model Channel {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([profileId])
+  @@index([creatorId])
   @@index([groupspaceId])
 }
