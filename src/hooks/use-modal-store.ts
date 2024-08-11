@@ -1,7 +1,7 @@
 import { GroupSpace } from '@prisma/client';
 import { create } from 'zustand';
 
-export type ModalType = 'createServer' | 'invite';
+export type ModalType = 'createGroupspace' | 'invite' | 'editGroupspace';
 
 type ModalData = {
   groupspace?: GroupSpace;
