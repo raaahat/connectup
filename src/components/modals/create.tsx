@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useTransition } from 'react';
+import { useTransition } from 'react';
 import {
   Form,
   FormControl,
@@ -25,23 +25,20 @@ import { Button } from '../ui/button';
 import { ModeToggle } from '../mode-toggle';
 import FileUpload from '@/components/file-upload';
 import { ProfileSchema } from '@/schemas';
+import { createGroupSpace } from '@/actions/group-space';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/hooks/use-modal-store';
-import { editGroupSpace } from '@/actions/edit-groupspace';
 
 export const CreateGroupspaceModal = () => {
-  const { isOpen, onClose, type, data } = useModal();
+  const { isOpen, onClose, type } = useModal();
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
-  const { groupspace } = data;
   const isModalOpen = isOpen && type === 'createGroupspace';
 
+  const [isPending, startTransition] = useTransition();
   function onSubmit(values: z.infer<typeof ProfileSchema>) {
     startTransition(() => {
-      editGroupSpace(groupspace?.id, values).then((data) => {
-        if (!data) console.log('Internal Error');
-      });
+      createGroupSpace(values).then((data) => {});
     });
     form.reset();
     router.refresh();
@@ -54,12 +51,6 @@ export const CreateGroupspaceModal = () => {
       imageUrl: '',
     },
   });
-  useEffect(() => {
-    if (groupspace) {
-      form.setValue('name', groupspace.name);
-      form.setValue('imageUrl', groupspace.imageUrl);
-    }
-  }, [groupspace, form]);
 
   const handleClose = () => {
     form.reset();
@@ -71,11 +62,11 @@ export const CreateGroupspaceModal = () => {
         <DialogHeader className="pt-8 px-6">
           <DialogTitle>
             <ModeToggle />
-            Edit your Group Space
+            Customize your Groupspace
           </DialogTitle>
           <DialogDescription>
-            Give your Group Space a personality with a name and an image. You
-            can always change it later.
+            Give your groupspace a personality with a name and an image. You can
+            always change it later.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -95,7 +86,7 @@ export const CreateGroupspaceModal = () => {
                         />
                       </FormControl>
                       <FormDescription className="text-xs">
-                        This will be your Group icon
+                        This will be your group icon
                       </FormDescription>
                       <FormMessage className="text-red-500" />
                     </FormItem>
@@ -108,7 +99,7 @@ export const CreateGroupspaceModal = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className=" uppercase font-bold">
-                      Group Space name
+                      Groupspace name
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -128,7 +119,7 @@ export const CreateGroupspaceModal = () => {
             </div>
             <DialogFooter className="px-6 py-4">
               <Button variant="primary" disabled={isPending} type="submit">
-                Save
+                Create
               </Button>
             </DialogFooter>
           </form>
