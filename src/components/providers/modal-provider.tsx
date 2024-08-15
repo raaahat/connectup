@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { EditGroupspaceModal } from '../modals/edit';
 import { InviteModal } from '../modals/invite-modal';
 import { CreateGroupspaceModal } from '../modals/create';
+import { MembersModal } from '../modals/members-modal';
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -19,6 +20,7 @@ export const ModalProvider = () => {
       <CreateGroupspaceModal />
       <InviteModal />
       <EditGroupspaceModal />
+      <MembersModal />
     </>
   );
 };
