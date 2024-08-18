@@ -35,12 +35,16 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { MemberRole } from '@prisma/client';
+import { editMemberRole, kickMember } from '@/actions/member';
+import { useRouter } from 'next/navigation';
 const roleIconMap = {
   GUEST: null,
   MODERATOR: <ShieldCheck className="h-4 w-4 ml-2 text-indigo-500" />,
   ADMIN: <ShieldAlert className="h-4 w-4 ml-2 text-rose-500" />,
 };
 export const MembersModal = () => {
+  const router = useRouter();
   const { isOpen, onOpen, onClose, type, data } = useModal();
   const [loadingId, setLoadingId] = useState('');
   const { groupspace } = data as {
@@ -50,6 +54,25 @@ export const MembersModal = () => {
 
   const isModalOpen = isOpen && type === 'members';
 
+  const onRoleChange = async (memberId: string, role: MemberRole) => {
+    setLoadingId(memberId);
+    const res = await editMemberRole(memberId, groupspace.id, role);
+    router.refresh();
+    if (res) onOpen('members', { groupspace: res });
+    setLoadingId('');
+  };
+
+  const onKick = async (memberId: string) => {
+    setLoadingId(memberId);
+    try {
+      const res = await kickMember(memberId, groupspace.id);
+      router.refresh();
+      if (res) onOpen('members', { groupspace: res });
+      setLoadingId('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent className="overflow-hidden">
@@ -88,14 +111,20 @@ export const MembersModal = () => {
                           </DropdownMenuSubTrigger>
                           <DropdownMenuPortal>
                             <DropdownMenuSubContent>
-                              <DropdownMenuItem onClick={() => {}}>
+                              <DropdownMenuItem
+                                onClick={() => onRoleChange(member.id, 'GUEST')}
+                              >
                                 <Shield className="h-4 w-4 mr-2" />
                                 Guest
                                 {member.role === 'GUEST' && (
                                   <Check className="h4 w-4 ml-auto" />
                                 )}
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => {}}>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  onRoleChange(member.id, 'MODERATOR')
+                                }
+                              >
                                 <ShieldCheck className="h-4 w-4 mr-2" />
                                 Moderator
                                 {member.role === 'MODERATOR' && (
@@ -106,7 +135,7 @@ export const MembersModal = () => {
                           </DropdownMenuPortal>
                         </DropdownMenuSub>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => {}}>
+                        <DropdownMenuItem onClick={() => onKick(member.id)}>
                           <Gavel className="h-4 w-4 mr-2" />
                           Kick
                         </DropdownMenuItem>
