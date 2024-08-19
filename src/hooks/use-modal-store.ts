@@ -5,7 +5,8 @@ export type ModalType =
   | 'createGroupspace'
   | 'invite'
   | 'editGroupspace'
-  | 'members';
+  | 'members'
+  | 'createZone';
 
 type ModalData = {
   groupspace?: GroupSpace;

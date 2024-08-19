@@ -69,8 +69,11 @@ export const GroupSpaceHeader = ({
           </DropdownMenuItem>
         )}
         {isModerator && (
-          <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
-            Create Channel
+          <DropdownMenuItem
+            onClick={() => onOpen('createZone')}
+            className="px-3 py-2 text-sm cursor-pointer"
+          >
+            Create Zone
             <PlusCircle className="h-4 w-4 ml-auto" />
           </DropdownMenuItem>
         )}
