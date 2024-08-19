@@ -85,8 +85,13 @@ export const GroupSpaceHeader = ({
           </DropdownMenuItem>
         )}
         {!isAdmin && (
-          <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer text-rose-500">
-            Leave Server
+          <DropdownMenuItem
+            onClick={() => {
+              onOpen('leaveGroupspace', { groupspace });
+            }}
+            className="px-3 py-2 text-sm cursor-pointer text-rose-500"
+          >
+            Leave Groupspace
             <LogOutIcon className="h-4 w-4 ml-auto" />
           </DropdownMenuItem>
         )}
