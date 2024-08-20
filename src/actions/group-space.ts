@@ -58,3 +58,15 @@ export const leaveGroupspace = async (groupspaceId: string) => {
   });
   if (groupspace) return groupspace;
 };
+export const deleteGroupspace = async (groupspaceId: string) => {
+  const profile = await currentProfile();
+  if (!profile) return auth().redirectToSignIn();
+
+  const groupspace = await db.groupSpace.delete({
+    where: {
+      id: groupspaceId,
+      ownerId: profile.id,
+    },
+  });
+  if (groupspace) return groupspace;
+};

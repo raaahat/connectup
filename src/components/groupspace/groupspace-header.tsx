@@ -79,8 +79,13 @@ export const GroupSpaceHeader = ({
         )}
         {isModerator && <DropdownMenuSeparator />}
         {isAdmin && (
-          <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer text-rose-500">
-            Delete Server
+          <DropdownMenuItem
+            onClick={() => {
+              onOpen('deleteGroupspace', { groupspace });
+            }}
+            className="px-3 py-2 text-sm cursor-pointer text-rose-500"
+          >
+            Delete Groupspace
             <Trash className="h-4 w-4 ml-auto" />
           </DropdownMenuItem>
         )}
