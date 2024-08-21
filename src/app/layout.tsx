@@ -13,8 +13,10 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'Template for nextjsprisma',
-  description: 'Starter code for nextjs prisma shadcnui theme project',
+  title: 'ConnectUp - Connect, Chat, and Collaborate',
+  description:
+    'ConnectUp is a platform for creating and managing hubs with text, voice, and video spaces. Connect, chat, and collaborate effortlessly.',
+  metadataBase: new URL('https://connectup.yourdomain.com'),
 };
 
 export default function RootLayout({
