@@ -6,6 +6,10 @@ import { GroupSpaceHeader } from './groupspace-header';
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from 'lucide-react';
 import { GroupspaceSearch } from './groupspace-search';
 import { ScrollArea } from '../ui/scroll-area';
+import { Separator } from '../ui/separator';
+import { GroupspaceSection } from './section';
+import { GroupspaceZone } from './zones';
+import { GroupspaceMember } from './member';
 
 const iconMap = {
   [ZoneType.TEXT]: <Hash className="mr-2 h-4 w-4" />,
@@ -114,6 +118,87 @@ export const GroupSpaceSidebar = async ({
             ]}
           />
         </div>
+        <Separator className="bg-zinc-200 dark:bg-zinc-700 rounded-md my-2" />
+        {!!textZones?.length && (
+          <div className="mb-2">
+            <GroupspaceSection
+              sectionType="zones"
+              zoneType={ZoneType.TEXT}
+              role={role}
+              label="Text Zones"
+            />
+
+            <div className="space-y-[2px]">
+              {textZones.map((zone) => (
+                <GroupspaceZone
+                  key={zone.id}
+                  zone={zone}
+                  role={role}
+                  groupspace={groupSpace}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {!!audioZones?.length && (
+          <div className="mb-2">
+            <GroupspaceSection
+              sectionType="zones"
+              zoneType={ZoneType.AUDIO}
+              role={role}
+              label="Voice Zones"
+            />
+            <div className="space-y-[2px]">
+              {audioZones.map((zone) => (
+                <GroupspaceZone
+                  key={zone.id}
+                  zone={zone}
+                  role={role}
+                  groupspace={groupSpace}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {!!videoZones?.length && (
+          <div className="mb-2">
+            <GroupspaceSection
+              sectionType="zones"
+              zoneType={ZoneType.VIDEO}
+              role={role}
+              label="Video Zones"
+            />
+            <div className="space-y-[2px]">
+              {videoZones.map((zone) => (
+                <GroupspaceZone
+                  key={zone.id}
+                  zone={zone}
+                  role={role}
+                  groupspace={groupSpace}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {!!members?.length && (
+          <div className="mb-2">
+            <GroupspaceSection
+              sectionType="members"
+              role={role}
+              label="Members"
+              groupspace={groupSpace}
+            />
+            <div className="space-y-[2px]">
+              {members.map((member) => (
+                <GroupspaceMember
+                  key={member.id}
+                  member={member}
+                  groupspace={groupSpace}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </ScrollArea>
     </div>
   );

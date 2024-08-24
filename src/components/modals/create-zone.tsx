@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTransition } from 'react';
+import { useEffect, useTransition } from 'react';
 import {
   Form,
   FormControl,
@@ -22,7 +22,6 @@ import {
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { ModeToggle } from '../mode-toggle';
-import FileUpload from '@/components/file-upload';
 import { CreateZoneSchema } from '@/schemas';
 
 import { useParams, useRouter } from 'next/navigation';
@@ -38,13 +37,32 @@ import {
 import { createZone } from '@/actions/zone';
 
 export const CreateZoneModal = () => {
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
+  const { zoneType } = data;
   const router = useRouter();
   const params: { groupspaceId: string } = useParams();
+
   const groupspaceId = params.groupspaceId;
   const isModalOpen = isOpen && type === 'createZone';
 
   const [isPending, startTransition] = useTransition();
+
+  const form = useForm({
+    resolver: zodResolver(CreateZoneSchema),
+    defaultValues: {
+      name: '',
+      type: zoneType || ZoneType.TEXT,
+    },
+  });
+
+  useEffect(() => {
+    if (zoneType) {
+      form.setValue('type', zoneType);
+    } else {
+      form.setValue('type', ZoneType.TEXT);
+    }
+  }, [zoneType, form]);
+
   function onSubmit(values: z.infer<typeof CreateZoneSchema>) {
     startTransition(async () => {
       const res = await createZone(groupspaceId, values);
@@ -53,14 +71,6 @@ export const CreateZoneModal = () => {
     router.refresh();
     onClose();
   }
-  const form = useForm({
-    resolver: zodResolver(CreateZoneSchema),
-    defaultValues: {
-      name: '',
-      type: ZoneType.TEXT,
-    },
-  });
-
   const handleClose = () => {
     form.reset();
     onClose();
