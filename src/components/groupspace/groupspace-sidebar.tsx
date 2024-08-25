@@ -26,17 +26,17 @@ const roleIconMap = {
 };
 
 type GroupSpaceSidebarProps = {
-  groupsapceId: string;
+  groupspaceId: string;
 };
 export const GroupSpaceSidebar = async ({
-  groupsapceId,
+  groupspaceId,
 }: GroupSpaceSidebarProps) => {
   const profile = await currentProfile();
   if (!profile) return redirect('/');
 
   const groupSpace = await db.groupSpace.findUnique({
     where: {
-      id: groupsapceId,
+      id: groupspaceId,
     },
     include: {
       zones: {

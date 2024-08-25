@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { currentProfile } from '@/database/current-profile';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/prisma';
+import { ChatHeader } from '@/components/chat/chat-header';
 
 interface ZoneIdPageProps {
   params: {
@@ -31,13 +32,12 @@ export default async function ZoneIdPage({
 
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
-      zoneId page
-      {/* <ChatHeader
+      <ChatHeader
         name={zone.name}
         groupspaceId={zone.groupspaceId}
         type="zone"
       />
-      {zone.type === ZoneType.TEXT && (
+      {/* {zone.type === ZoneType.TEXT && (
         <>
           <ChatMessages
             member={member}

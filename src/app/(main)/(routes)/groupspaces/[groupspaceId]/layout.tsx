@@ -29,8 +29,8 @@ const GroupspaceIdLayout = async ({
   if (!groupSpace) return redirect('/');
   return (
     <div className=" h-full">
-      <div className="flex h-full w-60 z-20 flex-col fixed  inset-y-0 ">
-        <GroupSpaceSidebar groupsapceId={params.groupspaceId} />
+      <div className="hidden md:flex h-full w-60 z-20 flex-col fixed  inset-y-0 ">
+        <GroupSpaceSidebar groupspaceId={params.groupspaceId} />
       </div>
       <main className=" h-full md:pl-60">{children}</main>
     </div>
