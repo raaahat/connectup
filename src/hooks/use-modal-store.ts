@@ -1,4 +1,4 @@
-import { GroupSpace, ZoneType } from '@prisma/client';
+import { GroupSpace, Zone, ZoneType } from '@prisma/client';
 import { create } from 'zustand';
 
 export type ModalType =
@@ -8,11 +8,13 @@ export type ModalType =
   | 'members'
   | 'createZone'
   | 'leaveGroupspace'
-  | 'deleteGroupspace';
+  | 'deleteGroupspace'
+  | 'editZone';
 
 type ModalData = {
   groupspace?: GroupSpace;
   zoneType?: ZoneType;
+  zone?: Zone;
 };
 export type ModalStore = {
   type: ModalType | null;

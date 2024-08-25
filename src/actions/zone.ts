@@ -41,3 +41,46 @@ export const createZone = async (
   if (!groupspace) return null;
   return groupspace;
 };
+export const editZone = async (
+  groupspaceId: string | undefined,
+  zoneId: string | undefined,
+  { name, type }: z.infer<typeof CreateZoneSchema>
+) => {
+  if (!groupspaceId || !zoneId) return null;
+
+  const profile = await currentProfile();
+  if (!profile) return auth().redirectToSignIn();
+
+  if (name === 'home') return null;
+  const groupspace = await db.groupSpace.update({
+    where: {
+      id: groupspaceId,
+      members: {
+        some: {
+          profileId: profile.id,
+          role: {
+            in: [MemberRole.ADMIN, MemberRole.MODERATOR],
+          },
+        },
+      },
+    },
+    data: {
+      zones: {
+        update: {
+          where: {
+            id: zoneId,
+            NOT: {
+              name: 'home',
+            },
+          },
+          data: {
+            name,
+            type,
+          },
+        },
+      },
+    },
+  });
+  if (!groupspace) return null;
+  return groupspace;
+};

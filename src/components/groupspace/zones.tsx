@@ -38,7 +38,7 @@ export function GroupspaceZone({
   const onAction = (e: React.MouseEvent, action: ModalType) => {
     e.stopPropagation();
 
-    // onOpen(action, { zone, groupspace });
+    onOpen(action, { zone, groupspace });
   };
 
   return (
@@ -63,7 +63,9 @@ export function GroupspaceZone({
         <div className="ml-auto flex items-center gap-x-2">
           <ActionTooltip label="Edit">
             <Edit
-              onClick={(e) => {}}
+              onClick={(e) => {
+                onAction(e, 'editZone');
+              }}
               className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition"
             />
           </ActionTooltip>
