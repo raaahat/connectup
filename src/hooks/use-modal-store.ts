@@ -9,7 +9,8 @@ export type ModalType =
   | 'createZone'
   | 'leaveGroupspace'
   | 'deleteGroupspace'
-  | 'editZone';
+  | 'editZone'
+  | 'deleteZone';
 
 type ModalData = {
   groupspace?: GroupSpace;

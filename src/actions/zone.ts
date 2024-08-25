@@ -84,3 +84,38 @@ export const editZone = async (
   if (!groupspace) return null;
   return groupspace;
 };
+export const deleteZone = async (
+  groupspaceId: string | undefined,
+  zoneId: string | undefined
+) => {
+  if (!groupspaceId || !zoneId) return null;
+
+  const profile = await currentProfile();
+  if (!profile) return auth().redirectToSignIn();
+
+  const groupspace = await db.groupSpace.update({
+    where: {
+      id: groupspaceId,
+      members: {
+        some: {
+          profileId: profile.id,
+          role: {
+            in: [MemberRole.ADMIN, MemberRole.MODERATOR],
+          },
+        },
+      },
+    },
+    data: {
+      zones: {
+        delete: {
+          id: zoneId,
+          name: {
+            not: 'home',
+          },
+        },
+      },
+    },
+  });
+  if (!groupspace) return null;
+  return groupspace;
+};
