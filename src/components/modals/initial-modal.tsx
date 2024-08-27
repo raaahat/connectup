@@ -52,10 +52,10 @@ export const InitialModal = () => {
         <DialogHeader className="pt-8 px-6">
           <DialogTitle>
             <ModeToggle />
-            Customize your server
+            Customize your groupspace
           </DialogTitle>
           <DialogDescription>
-            Give your server a personality with a name and an image. You can
+            Give your groupspace a personality with a name and an image. You can
             always change it later.
           </DialogDescription>
         </DialogHeader>
@@ -76,7 +76,7 @@ export const InitialModal = () => {
                         />
                       </FormControl>
                       <FormDescription className="text-xs">
-                        This will be your server icon
+                        This will be your groupspace icon
                       </FormDescription>
                       <FormMessage className="text-red-500" />
                     </FormItem>
@@ -89,7 +89,7 @@ export const InitialModal = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className=" uppercase font-bold">
-                      Server name
+                      Groupspace name
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -100,7 +100,7 @@ export const InitialModal = () => {
                       />
                     </FormControl>
                     <FormDescription className="text-xs">
-                      This will be your public server name.
+                      This will be your public groupspace name.
                     </FormDescription>
                     <FormMessage className="text-red-500" />
                   </FormItem>

@@ -10,12 +10,15 @@ export type ModalType =
   | 'leaveGroupspace'
   | 'deleteGroupspace'
   | 'editZone'
-  | 'deleteZone';
+  | 'deleteZone'
+  | 'messageFile';
 
 type ModalData = {
   groupspace?: GroupSpace;
   zoneType?: ZoneType;
   zone?: Zone;
+  apiUrl?: string;
+  query?: Record<string, any>;
 };
 export type ModalStore = {
   type: ModalType | null;
