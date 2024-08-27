@@ -6,6 +6,7 @@ import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/prisma';
 import { ChatHeader } from '@/components/chat/chat-header';
 import { getOrCreateConversation } from '@/lib/conversation';
+import { ChatInput } from '@/components/chat/chat-input';
 
 interface MemberIdPageProps {
   params: {
@@ -57,6 +58,8 @@ export default async function MemberIdPage({
         groupspaceId={groupspaceId}
         type="conversation"
       />
+      <div className="flex-1">future messages</div>
+
       {/* {video && <MediaRoom chatId={conversation.id} video audio />}
       {!video && (
         <>
@@ -72,16 +75,16 @@ export default async function MemberIdPage({
             socketQuery={{
               conversationId: conversation.id,
             }}
-          />
-          <ChatInput
-            name={otherMember.profile.name}
-            type="conversation"
-            apiUrl="/api/socket/direct-messages"
-            query={{
-              conversationId: conversation.id,
-            }}
-          />
-        </>
+          /> */}
+      <ChatInput
+        name={otherMember.profile.name}
+        type="conversation"
+        apiUrl="/api/socket/direct-messages"
+        query={{
+          conversationId: conversation.id,
+        }}
+      />
+      {/* </>
       )} */}
     </div>
   );

@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ModalProvider } from '@/components/providers/modal-provider';
+import { SocketProvider } from '@/components/providers/socket-provider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -40,8 +41,10 @@ export default function RootLayout({
             disableTransitionOnChange
             storageKey="connectup-theme"
           >
-            <ModalProvider />
-            {children}
+            <SocketProvider>
+              <ModalProvider />
+              {children}
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </html>

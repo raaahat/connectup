@@ -4,6 +4,7 @@ import { Hash } from 'lucide-react';
 // import { MobileToggle } from '@/components/mobile-toggle';
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { MobileToggle } from '../mobile-toggle';
+import { SocketIndicatior } from '../socket-indicator';
 
 interface ChatHeaderProps {
   groupspaceId: string;
@@ -28,10 +29,10 @@ export function ChatHeader({
         <UserAvatar src={imageUrl} className="h-8 w-8 md:h-8 md:w-8 mr-2" />
       )}
       <p className="font-semibold text-md text-black dark:text-white">{name}</p>
-      {/* <div className="ml-auto flex items-center">
-        {type === 'conversation' && <ChatVideoButton />}
+      <div className="ml-auto flex items-center">
+        {/* {type === 'conversation' && <ChatVideoButton />} */}
         <SocketIndicatior />
-      </div> */}
+      </div>
     </div>
   );
 }

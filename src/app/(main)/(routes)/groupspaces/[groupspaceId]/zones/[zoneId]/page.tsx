@@ -5,6 +5,7 @@ import { currentProfile } from '@/database/current-profile';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/prisma';
 import { ChatHeader } from '@/components/chat/chat-header';
+import { ChatInput } from '@/components/chat/chat-input';
 
 interface ZoneIdPageProps {
   params: {
@@ -36,6 +37,16 @@ export default async function ZoneIdPage({
         name={zone.name}
         groupspaceId={zone.groupspaceId}
         type="zone"
+      />
+      <div className="flex-1">future messages</div>
+      <ChatInput
+        name={zone.name}
+        type="zone"
+        apiUrl="/api/socket/messages"
+        query={{
+          zoneId: zone.id,
+          groupspaceId: zone.groupspaceId,
+        }}
       />
       {/* {zone.type === ZoneType.TEXT && (
         <>
