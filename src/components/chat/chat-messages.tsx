@@ -3,11 +3,11 @@
 import React, { Fragment, useRef, ElementRef } from 'react';
 import { Member, Message, Profile } from '@prisma/client';
 import { Loader2, ServerCrash } from 'lucide-react';
-// import { format } from "date-fns";
+import { format } from 'date-fns';
 
 import { ChatWelcome } from '@/components/chat/chat-welcome';
-// import { ChatItem } from "@/components/chat/chat-item";
 import { useChatQuery } from '@/hooks/use-chat-query';
+import { ChatItem } from './chat-item';
 // import { useChatSocket } from "@/hooks/use-chat-socket";
 // import { useChatScroll } from "@/hooks/use-chat-scroll";
 
@@ -111,9 +111,6 @@ export function ChatMessages({
         {data?.pages.map((group, index) => (
           <Fragment key={index}>
             {group?.items.map((message: MessagesWithMemberWithProfile) => (
-              <div key={message.id}> {message.content} </div>
-            ))}
-            {/* {group?.items.map((message: MessagesWithMemberWithProfile) => (
               <ChatItem
                 key={message.id}
                 currentMember={member}
@@ -122,15 +119,14 @@ export function ChatMessages({
                 content={message.content}
                 fileUrl={message.fileUrl}
                 deleted={message.deleted}
-                timestamp={format(
-                  new Date(message.createdAt),
-                  DATE_FORMAT
-                )}
-                isUpdated={message.updatedAt !== message.createdAt}
+                timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+                isUpdated={
+                  message.updatedAt.getTime() !== message.createdAt.getTime()
+                }
                 socketQuery={socketQuery}
                 socketUrl={socketUrl}
               />
-            ))} */}
+            ))}
           </Fragment>
         ))}
       </div>

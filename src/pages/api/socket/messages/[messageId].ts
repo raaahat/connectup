@@ -1,136 +1,133 @@
-import { NextApiRequest } from "next";
-import { MemberRole } from "@prisma/client";
+import { NextApiRequest } from 'next';
+import { MemberRole } from '@prisma/client';
 
-import { NextApiResponseServerIo } from "@/types";
-import { currentProfilePages } from "@/lib/current-profile-pages";
-import { db } from "@/lib/db";
+import { NextApiResponseServerIo } from '@/types';
+import { currentProfilePages } from '@/lib/current-profile-pages';
+import { db } from '@/lib/prisma';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponseServerIo
 ) {
-  if (req.method !== "DELETE" && req.method !== "PATCH")
-    return res.status(405).json({ error: "Method not allowed" });
+  if (req.method !== 'DELETE' && req.method !== 'PATCH')
+    return res.status(405).json({ error: 'Method not allowed' });
 
   try {
     const profile = await currentProfilePages(req);
     const { content } = req.body;
-    const { serverId, channelId, messageId } = req.query;
+    const { groupspaceId, zoneId, messageId } = req.query;
 
-    if (!profile) return res.status(401).json({ error: "Unauthorized" });
+    if (!profile) return res.status(401).json({ error: 'Unauthorized' });
 
-    if (!serverId)
-      return res.status(400).json({ error: "Server ID Missing" });
+    if (!groupspaceId)
+      return res.status(400).json({ error: 'Groupspace ID Missing' });
 
-    if (!channelId)
-      return res.status(400).json({ error: "Channel ID Missing" });
+    if (!zoneId) return res.status(400).json({ error: 'Zone ID Missing' });
 
-    const server = await db.server.findFirst({
+    const groupspace = await db.groupSpace.findFirst({
       where: {
-        id: serverId as string,
+        id: groupspaceId as string,
         members: {
           some: {
-            profileId: profile.id
-          }
-        }
+            profileId: profile.id,
+          },
+        },
       },
       include: {
-        members: true
-      }
+        members: true,
+      },
     });
 
-    if (!server)
-      return res.status(404).json({ error: "Server not found" });
+    if (!groupspace)
+      return res.status(404).json({ error: 'Groupspace not found' });
 
-    const channel = await db.channel.findFirst({
+    const zone = await db.zone.findFirst({
       where: {
-        id: channelId as string,
-        serverId: serverId as string
-      }
+        id: zoneId as string,
+        groupspaceId: groupspaceId as string,
+      },
     });
 
-    if (!channel)
-      return res.status(404).json({ error: "Channel not found" });
+    if (!zone) return res.status(404).json({ error: 'Zone not found' });
 
-    const member = server.members.find(
+    const member = groupspace.members.find(
       (member) => member.profileId === profile.id
     );
 
-    if (!member)
-      return res.status(404).json({ error: "Member not found" });
+    if (!member) return res.status(404).json({ error: 'Member not found' });
 
     let message = await db.message.findFirst({
       where: {
         id: messageId as string,
-        channelId: channelId as string
+        zoneId: zoneId as string,
       },
       include: {
         member: {
           include: {
-            profile: true
-          }
-        }
-      }
+            profile: true,
+          },
+        },
+      },
     });
 
     if (!message || message.deleted)
-      return res.status(404).json({ error: "Message not found" });
+      return res.status(404).json({ error: 'Message not found' });
 
     const isMessageOwner = message.memberId === member.id;
     const isAdmin = member.role === MemberRole.ADMIN;
     const isModerator = member.role === MemberRole.MODERATOR;
     const canModify = isMessageOwner || isAdmin || isModerator;
 
-    if (!canModify) return res.status(401).json({ error: "Unauthorized" });
+    if (!canModify) return res.status(401).json({ error: 'Unauthorized' });
 
-    if (req.method === "DELETE") {
+    if (req.method === 'DELETE') {
       message = await db.message.update({
         where: {
-          id: messageId as string
+          id: messageId as string,
         },
         data: {
           fileUrl: null,
-          content: "This message has been deleted.",
-          deleted: true
+          content: 'This message has been deleted.',
+          deleted: true,
         },
         include: {
           member: {
             include: {
-              profile: true
-            }
-          }
-        }
+              profile: true,
+            },
+          },
+        },
       });
     }
 
-    if (req.method === "PATCH") {
+    if (req.method === 'PATCH') {
       if (!isMessageOwner)
-        return res.status(401).json({ error: "Unauthorized" });
+        return res.status(401).json({ error: 'Unauthorized' });
 
       message = await db.message.update({
         where: {
-          id: messageId as string
+          id: messageId as string,
         },
         data: {
-          content
+          content,
         },
         include: {
           member: {
             include: {
-              profile: true
-            }
-          }
-        }
+              profile: true,
+            },
+          },
+        },
       });
     }
 
-    const updateKey = `chat:${channelId}:messages:update`;
+    const updateKey = `chat:${zoneId}:messages:update`;
 
     res?.socket?.server?.io?.emit(updateKey, message);
 
     return res.status(200).json(message);
   } catch (error) {
-    console.error("[MESSAGES_ID]", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error('[MESSAGES_ID]', error);
+    return res.status(500).json({ error: 'Internal Groupspace Error' });
   }
 }

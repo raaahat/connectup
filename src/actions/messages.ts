@@ -18,9 +18,9 @@ export const messages = async ({ cursor, zoneId }: MessagesParams) => {
 
   const profile = await currentProfile();
   if (!profile) return auth().redirectToSignIn();
-  let messages: Message[] = [];
+  let res;
   if (cursor) {
-    messages = await db.message.findMany({
+    res = await db.message.findMany({
       take: MESSAGES_BATCH,
       skip: 1,
       cursor: {
@@ -39,7 +39,7 @@ export const messages = async ({ cursor, zoneId }: MessagesParams) => {
       orderBy: { createdAt: 'desc' },
     });
   } else {
-    messages = await db.message.findMany({
+    res = await db.message.findMany({
       take: MESSAGES_BATCH,
       where: { zoneId },
       include: {
@@ -55,8 +55,8 @@ export const messages = async ({ cursor, zoneId }: MessagesParams) => {
 
   let nextCursor = null;
 
-  if (messages.length === MESSAGES_BATCH) {
-    nextCursor = messages[MESSAGES_BATCH - 1].id;
+  if (res.length === MESSAGES_BATCH) {
+    nextCursor = res[MESSAGES_BATCH - 1].id;
   }
-  return { items: messages, nextCursor };
+  return { items: res, nextCursor };
 };
