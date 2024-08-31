@@ -11,6 +11,7 @@ import { DeleteGroupspaceModal } from '../modals/delete-groupspace-modal';
 import { EditZoneModal } from '../modals/edit-zone';
 import { DeleteZoneModal } from '../modals/delete-zone-modal';
 import { MessageFileModal } from '../modals/message-file-modal';
+import { DeleteMessageModal } from '../modals/delete-message-modal';
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -33,6 +34,7 @@ export const ModalProvider = () => {
       <EditZoneModal />
       <DeleteZoneModal />
       <MessageFileModal />
+      <DeleteMessageModal />
     </>
   );
 };

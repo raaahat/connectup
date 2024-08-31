@@ -11,7 +11,8 @@ export type ModalType =
   | 'deleteGroupspace'
   | 'editZone'
   | 'deleteZone'
-  | 'messageFile';
+  | 'messageFile'
+  | 'deleteMessage';
 
 type ModalData = {
   groupspace?: GroupSpace;
