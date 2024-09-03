@@ -8,7 +8,8 @@ import { format } from 'date-fns';
 import { ChatWelcome } from '@/components/chat/chat-welcome';
 import { useChatQuery } from '@/hooks/use-chat-query';
 import { ChatItem } from './chat-item';
-// import { useChatSocket } from "@/hooks/use-chat-socket";
+import { useChatSocket } from '@/hooks/use-chat-socket';
+import { useChatScroll } from '@/hooks/use-chat-scroll';
 // import { useChatScroll } from "@/hooks/use-chat-scroll";
 
 interface ChatMessagesProps {
@@ -56,19 +57,19 @@ export function ChatMessages({
       paramKey,
       paramValue,
     });
-  // useChatSocket({
-  //   queryKey,
-  //   addKey,
-  //   updateKey
-  // });
-  // useChatScroll({
-  //   chatRef,
-  //   bottomRef,
-  //   loadMore: fetchNextPage,
-  //   shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
-  //   count: data?.pages?.[0]?.items?.length ?? 0
-  // });
-  console.log(data);
+  useChatSocket({
+    queryKey,
+    addKey,
+    updateKey,
+  });
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    loadMore: fetchNextPage,
+    shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
+    count: data?.pages?.[0]?.items?.length ?? 0,
+  });
+
   if (status === 'pending')
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
@@ -121,7 +122,7 @@ export function ChatMessages({
                 deleted={message.deleted}
                 timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
                 isUpdated={
-                  message.updatedAt.getTime() !== message.createdAt.getTime()
+                  message.updatedAt.toString() !== message.createdAt.toString()
                 }
                 socketQuery={socketQuery}
                 socketUrl={socketUrl}
