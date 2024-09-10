@@ -16,7 +16,7 @@ interface ChatMessagesProps {
   name: string;
   member: Member;
   chatId: string;
-  apiUrl: string;
+  actionType: 'messages' | 'direct-messages';
   socketUrl: string;
   socketQuery: Record<string, string>;
   paramKey: 'zoneId' | 'conversationId';
@@ -24,7 +24,8 @@ interface ChatMessagesProps {
   type: 'zone' | 'conversation';
 }
 
-type MessagesWithMemberWithProfile = Message & {
+type MessagesWithMemberWithProfile = Omit<Message, 'zoneId'> & {
+  zoneId?: string;
   member: Member & {
     profile: Profile;
   };
@@ -36,7 +37,7 @@ export function ChatMessages({
   name,
   member,
   chatId,
-  apiUrl,
+  actionType,
   socketUrl,
   socketQuery,
   paramKey,
@@ -53,7 +54,7 @@ export function ChatMessages({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
       queryKey,
-      apiUrl,
+      actionType,
       paramKey,
       paramValue,
     });

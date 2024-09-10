@@ -1,30 +1,38 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { useSocket } from '@/components/providers/socket-provider';
-import { messages } from '@/actions/messages';
+import { getMessages } from '@/actions/messages';
+import { getDirectMessages } from '@/actions/direct-messages';
 
 interface ChatQueryProps {
   queryKey: string;
-  apiUrl: string;
+  actionType: 'messages' | 'direct-messages';
   paramKey: 'zoneId' | 'conversationId';
   paramValue: string;
 }
 
 export const useChatQuery = ({
   queryKey,
-  apiUrl,
+  actionType,
   paramKey,
   paramValue,
 }: ChatQueryProps) => {
   const { isConnected } = useSocket();
 
   const fetchMessages = async ({ pageParam }: { pageParam: string }) => {
-    const response = await messages({
-      cursor: pageParam,
-      [paramKey]: paramValue,
-    });
-
-    return response;
+    if (actionType === 'messages') {
+      const response = await getMessages({
+        cursor: pageParam,
+        [paramKey]: paramValue,
+      });
+      return response;
+    } else if (actionType === 'direct-messages') {
+      const response = await getDirectMessages({
+        cursor: pageParam,
+        [paramKey]: paramValue,
+      });
+      return response;
+    }
   };
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =

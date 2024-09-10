@@ -47,7 +47,7 @@ export default async function ZoneIdPage({
         name={zone.name}
         chatId={zone.id}
         type="zone"
-        apiUrl="/api/messages"
+        actionType="messages"
         socketUrl="/api/socket/messages"
         socketQuery={{
           zoneId: zone.id,

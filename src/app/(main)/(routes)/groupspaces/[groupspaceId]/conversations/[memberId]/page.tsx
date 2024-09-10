@@ -7,6 +7,7 @@ import { db } from '@/lib/prisma';
 import { ChatHeader } from '@/components/chat/chat-header';
 import { getOrCreateConversation } from '@/lib/conversation';
 import { ChatInput } from '@/components/chat/chat-input';
+import { ChatMessages } from '@/components/chat/chat-messages';
 
 interface MemberIdPageProps {
   params: {
@@ -59,7 +60,19 @@ export default async function MemberIdPage({
         type="conversation"
       />
       <div className="flex-1">future messages</div>
-
+      <ChatMessages
+        member={currentMember}
+        name={otherMember.profile.name}
+        chatId={conversation.id}
+        type="conversation"
+        actionType="direct-messages"
+        paramKey="conversationId"
+        paramValue={conversation.id}
+        socketUrl="/api/socket/direct-messages"
+        socketQuery={{
+          conversationId: conversation.id,
+        }}
+      />
       {/* {video && <MediaRoom chatId={conversation.id} video audio />}
       {!video && (
         <>

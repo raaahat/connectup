@@ -2,31 +2,32 @@
 import { currentProfile } from '@/database/current-profile';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/prisma';
-import { Message } from '@prisma/client';
 
 const MESSAGES_BATCH = 10;
 //cursor
-
 type MessagesParams = {
   cursor?: string;
   zoneId?: string;
   conversationId?: string;
 };
-export const getMessages = async ({ cursor, zoneId }: MessagesParams) => {
-  if (!zoneId) return undefined;
+export const getDirectMessages = async ({
+  cursor,
+  conversationId,
+}: MessagesParams) => {
+  if (!conversationId) return undefined;
 
   const profile = await currentProfile();
   if (!profile) return auth().redirectToSignIn();
   let res;
   if (cursor) {
-    res = await db.message.findMany({
+    res = await db.directMessage.findMany({
       take: MESSAGES_BATCH,
       skip: 1,
       cursor: {
         id: cursor,
       },
       where: {
-        zoneId,
+        conversationId,
       },
       include: {
         member: {
@@ -38,9 +39,9 @@ export const getMessages = async ({ cursor, zoneId }: MessagesParams) => {
       orderBy: { createdAt: 'desc' },
     });
   } else {
-    res = await db.message.findMany({
+    res = await db.directMessage.findMany({
       take: MESSAGES_BATCH,
-      where: { zoneId },
+      where: { conversationId },
       include: {
         member: {
           include: {
