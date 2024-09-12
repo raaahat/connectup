@@ -24,7 +24,7 @@ import { Button } from '../ui/button';
 import { ModeToggle } from '../mode-toggle';
 import { CreateZoneSchema } from '@/schemas';
 
-import { useParams, useRouter } from 'next/navigation';
+import { redirect, useParams, useRouter } from 'next/navigation';
 import { useModal } from '@/hooks/use-modal-store';
 import { ZoneType } from '@prisma/client';
 import {
@@ -40,9 +40,6 @@ export const EditZoneModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const { groupspace, zone } = data;
   const router = useRouter();
-  const params: { groupspaceId: string } = useParams();
-
-  const groupspaceId = params.groupspaceId;
   const isModalOpen = isOpen && type === 'editZone';
 
   const [isPending, startTransition] = useTransition();
@@ -62,6 +59,9 @@ export const EditZoneModal = () => {
     }
   }, [zone, form]);
 
+  const params: { groupspaceId: string } | null = useParams();
+  if (!params) return redirect('/');
+  const groupspaceId = params.groupspaceId;
   function onSubmit(values: z.infer<typeof CreateZoneSchema>) {
     startTransition(async () => {
       const res = await editZone(groupspaceId, zone?.id, values);
